@@ -1,8 +1,12 @@
+# os
+import os
 # requests
 import requests
 # from lxml, import html
 from lxml import html
 
+# global
+global_page_num = 0;
 
 # e.g. num == 2
 def get_page_number(num):
@@ -81,8 +85,7 @@ def get_image_detail_website(url):
         #print('--- test ---')
         #print(url)
         #print(image_detail_link)
-        # http://www.mmjpg.com/mm/938
-        # http://www.mmjpg.com/mm/938/5
+
 
         # res
         response = requests.get(image_detail_link).content
@@ -108,7 +111,10 @@ def download_image(image_title, image_detail_websites):
     # forloop
     for i in image_detail_websites:
         # file name
-        filename = 'img/%s%s.jpg' % (image_title, num)
+        filename = 'img/%s/%s%s.jpg' % (global_page_num, image_title, num)
+
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+
         # downloading
         print('Downloading: %s - %s/%s total，' % (image_title, num, amount))
         # open file
@@ -121,6 +127,10 @@ def download_image(image_title, image_detail_websites):
 if __name__ == '__main__':
     # input, page_number
     page_number = input('Please enter the page number that you want to scrape:')
+
+    # global_page_num
+    global_page_num = page_number;
+
     # forloop each link in get_page_number
     for link in get_page_number(page_number):
         # download image
